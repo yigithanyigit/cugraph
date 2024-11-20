@@ -32,7 +32,7 @@ jobs:
       contents: read
       packages: read
       pull-requests: read
-      id-token: writeid-token: write
+      id-token: write
     secrets: inherit
     uses: rapidsai/shared-workflows/.github/workflows/conda-cpp-build.yaml@branch-24.12
     with:
