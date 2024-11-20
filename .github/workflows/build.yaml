@@ -27,6 +27,8 @@ concurrency:
 
 jobs:
   cpp-build:
+    permissions:
+      id-token: write
     secrets: inherit
     uses: rapidsai/shared-workflows/.github/workflows/conda-cpp-build.yaml@branch-24.12
     with:
