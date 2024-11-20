@@ -21,18 +21,19 @@ on:
         type: string
         default: nightly
 
+permissions:
+  actions: read
+  contents: read
+  packages: read
+  pull-requests: read
+  id-token: write
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 jobs:
   cpp-build:
-    permissions:
-      actions: read
-      contents: read
-      packages: read
-      pull-requests: read
-      id-token: write
     secrets: inherit
     uses: rapidsai/shared-workflows/.github/workflows/conda-cpp-build.yaml@branch-24.12
     with:
