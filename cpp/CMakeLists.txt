@@ -490,6 +490,47 @@ target_link_libraries(cugraph
         cuco::cuco
     )
 
+
+
+################################################################################
+# - Example --------------------------------------------------------------------
+
+add_library(mmio STATIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/../thirdparty/mmio/mmio.c
+)
+
+add_executable(louvain_example apps/louvain.cu)
+
+target_include_directories(cugraph
+    PRIVATE
+        "${CMAKE_CURRENT_SOURCE_DIR}/../thirdparty"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../thirdparty/mmio"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src"
+    PUBLIC
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+        "$<INSTALL_INTERFACE:include>"
+)
+
+target_compile_options(louvain_example
+            PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CUGRAPH_CXX_FLAGS}>"
+                    "$<$<COMPILE_LANGUAGE:CUDA>:${CUGRAPH_CUDA_FLAGS}>"                    
+)
+
+target_compile_definitions(louvain_example PUBLIC CUDA_API_PER_THREAD_DEFAULT_STREAM)
+
+target_link_libraries(louvain_example 
+    PUBLIC
+        rmm::rmm
+        raft::raft
+        $<BUILD_LOCAL_INTERFACE:CUDA::toolkit>
+        $<TARGET_NAME_IF_EXISTS:cugraph-ops::cugraph-ops++>
+        cugraph::cugraph
+        mmio
+    PRIVATE
+        ${COMPILED_RAFT_LIB}
+        cuco::cuco
+    )
+
 ################################################################################
 # - C-API library --------------------------------------------------------------
 
